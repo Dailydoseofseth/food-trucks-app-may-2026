@@ -75,6 +75,12 @@ async function addOneFoodTruck(
 // 10. deleteOneFoodTruck(id)
 
 // 11. updateFoodTruckLocation(id, newLocation)
+async function updateFoodTruckLocation(id, newLocation) {
+  await db.query("UPDATE food_trucks SET current_location =$1 WHERE id = $2", [
+    id,
+    newLocation,
+  ]);
+}
 
 // 12. updateFoodTruckRating(id, newRating)
 
@@ -129,7 +135,11 @@ app.post("/add-one-food-truck", async (req, res) => {
 
 // 10. POST /delete-one-food-truck/:id - Carlotta
 
-// 11. POST /update-food-truck-location - Arianne
+// 11. POST /update-food-truck-location - Shirley
+app.post("/update-food-truck-location", async (req, res) => {
+  const { id, newLocation } = req.body;
+  await updateFoodTruckLocation(id, newLocation);
+  res.send("Success! The food truck location was updated!");
+});
 
 // 12. POST /update-food-truck-rating - BONUS!
-
