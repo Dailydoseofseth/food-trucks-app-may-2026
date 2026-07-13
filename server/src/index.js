@@ -1,3 +1,4 @@
+console.log("Running:", import.meta.filename);
 // ---------------------------------
 // Boilerplate Code to Set Up Server
 // ---------------------------------
@@ -14,7 +15,7 @@ const db = new pg.Pool({
 const app = express();
 app.use(express.json());
 
-const port = 3000;
+const port = 3001;
 app.listen(port, () => {
   console.log(`Server is listening on port ${port}`);
 });
@@ -73,6 +74,13 @@ async function addOneFoodTruck(
 }
 
 // 10. deleteOneFoodTruck(id)
+async function deleteOneFoodTruck(id) {
+  const result = await db.query(
+    "DELETE FROM food_trucks WHERE id = $1 RETURNING *",
+    [id],
+  );
+  return result.rows[0];
+}
 
 // 11. updateFoodTruckLocation(id, newLocation)
 
@@ -84,6 +92,7 @@ async function addOneFoodTruck(
 
 // 1. GET /get-all-food-trucks
 app.get("/get-all-food-trucks", async (req, res) => {
+  console.log("Route was hit!");
   const trucks = await getAllFoodTrucks();
   res.json(trucks);
 });
@@ -92,7 +101,7 @@ app.get("/get-all-food-trucks", async (req, res) => {
 
 // 3. GET /get-vegan-food-trucks - Shirley
 
-// 4. GET /get-food-trucks-by-price/:price - Seth
+// 4. GET /get-food-trucks-by-price/:price - ?
 
 // 5. GET /get-top-rated-food-trucks - Morgan
 
@@ -127,9 +136,27 @@ app.post("/add-one-food-truck", async (req, res) => {
   res.send(`Success! ${truck.name} was added!`);
 });
 
-// 10. POST /delete-one-food-truck/:id - Carlotta
+// 10. POST /delete-one-food-truck/:id - Seth
+app.post("/delete-one-food-truck/:id", async (req, res) => {
+  const id = req.params.id;
+
+  await deleteOneFoodTruck(id);
+
+  res.send(`Success! ${id} was deleted.`);
+});
 
 // 11. POST /update-food-truck-location - Arianne
 
 // 12. POST /update-food-truck-rating - BONUS!
 
+// ------DB SCHEMA-------------
+// CREATE TABLE food_trucks (
+//     id SERIAL PRIMARY KEY,
+//     name VARCHAR NOT NULL,
+//     current_location VARCHAR,
+//     daily_special VARCHAR,
+//     slogan VARCHAR,
+//     has_vegan_options BOOLEAN DEFAULT false,
+//     price_level INTEGER DEFAULT 2 CHECK (price_level BETWEEN 1 AND 5),
+//     rating DECIMAL(2,1) DEFAULT 4.0 CHECK (rating BETWEEN 0 AND 5)
+// );
