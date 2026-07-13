@@ -37,6 +37,16 @@ async function getAllFoodTrucks() {
 
 // 5. getTopRatedFoodTrucks()
 
+async function getTopRatedFoodTrucks() {
+  const result = await db.query(`
+    SELECT *
+    FROM food_trucks
+    WHERE rating >= 4.5;
+  `);
+
+  return result.rows;
+}
+
 // 6. getFoodTrucksSortedByRating()
 
 // 7. getFoodTrucksSortedByPrice()
@@ -94,7 +104,13 @@ app.get("/get-all-food-trucks", async (req, res) => {
 
 // 4. GET /get-food-trucks-by-price/:price - Seth
 
-// 5. GET /get-top-rated-food-trucks - Morgan
+// 5. GET /get-top-rated-food-trucks - Arianne
+
+app.get("/get-top-rated-food-trucks", async (req, res) => {
+  const foodTrucks = await getTopRatedFoodTrucks();
+
+  res.json(foodTrucks);
+});
 
 // 6. GET /get-food-trucks-sorted-by-rating - Zesty Pepper
 
