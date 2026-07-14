@@ -88,11 +88,6 @@ async function getFoodTrucksSortedByRating() {
   return result.rows;
 }
 // 7. getFoodTrucksSortedByPrice()
-app.get("/get-food-trucks-sorted-by-price", async (req, res) => {
-  const foodTrucks = await getFoodTrucksSortedByPrice();
-
-  res.json(foodTrucks);
-});
 async function getFoodTrucksSortedByPrice() {
   const result = await db.query(
     "SELECT * FROM food_trucks ORDER BY price_level ASC",
@@ -101,8 +96,11 @@ async function getFoodTrucksSortedByPrice() {
   return result.rows;
 }
 
-//
 // 8. getFoodTrucksCount()
+async function getFoodTrucksCount() {
+  const result = await db.query("SELECT COUNT(*) FROM food_trucks");
+  return result.rows[0].count;
+}
 
 // 9. addOneFoodTruck(...)
 async function addOneFoodTruck(
@@ -116,9 +114,9 @@ async function addOneFoodTruck(
 ) {
   const result = await db.query(
     `INSERT INTO food_trucks
-     (name, current_location, daily_special, slogan, has_vegan_options, price_level, rating)
-     VALUES ($1, $2, $3, $4, $5, $6, $7)
-     RETURNING *`,
+    (name, current_location, daily_special, slogan, has_vegan_options, price_level, rating)
+    VALUES ($1, $2, $3, $4, $5, $6, $7)
+    RETURNING *`,
     [
       name,
       current_location,
@@ -210,9 +208,18 @@ app.get("/get-food-trucks-sorted-by-rating", async (req, res) => {
     });
   }
 });
-// 7. GET /get-food-trucks-sorted-by-price - Jana
+// 7. GET /get-food-trucks-sorted-by-price - Ysabel
+app.get("/get-food-trucks-sorted-by-price", async (req, res) => {
+  const foodTrucks = await getFoodTrucksSortedByPrice();
+
+  res.json(foodTrucks);
+});
 
 // 8. GET /get-food-trucks-count - Meribel
+app.get("/get-food-trucks-count", async (req, res) => {
+  const count = await getFoodTrucksCount();
+  res.json({ count });
+});
 
 // 9. POST /add-one-food-truck - Shirley
 app.post("/add-one-food-truck", async (req, res) => {
