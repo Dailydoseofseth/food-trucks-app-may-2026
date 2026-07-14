@@ -95,14 +95,13 @@ app.get("/get-food-trucks-sorted-by-price", async (req, res) => {
 });
 async function getFoodTrucksSortedByPrice() {
   const result = await db.query(
-    "SELECT * FROM food_trucks ORDER BY price_level ASC"
+    "SELECT * FROM food_trucks ORDER BY price_level ASC",
   );
 
   return result.rows;
 }
 
-
-//     
+//
 // 8. getFoodTrucksCount()
 
 // 9. addOneFoodTruck(...)
@@ -153,13 +152,14 @@ async function updateFoodTruckLocation(id, newLocation) {
 
 // 12. updateFoodTruckRating(id, newRating)
 async function updateFoodTruckRating(id, newRating) {
-  const result = await db.query(`
+  const result = await db.query(
+    `
     UPDATE food_trucks
     SET rating = $2
     WHERE id = $1
     RETURNING *`,
-    [id, newRating]
-);
+    [id, newRating],
+  );
   return result.rows[0];
 }
 // ---------------------------------
@@ -244,10 +244,15 @@ app.post("/delete-one-food-truck/:id", async (req, res) => {
   const id = req.params.id;
 
   await deleteOneFoodTruck(id);
+
+  res.send(`Success! ${id} was deleted.`);
 });
+
+// 11. ???????
+
 // 12. POST /update-food-truck-rating - BONUS! - ZESTY
 app.post("/update-food-truck-rating", async (req, res) => {
-  const {id, rating} = req.body;
+  const { id, rating } = req.body;
   const truck = await updateFoodTruckRating(id, rating);
-   res.send(`Success! ${truck.name}'s rating was updated to ${truck.rating}.`);
-}); 
+  res.send(`Success! ${truck.name}'s rating was updated to ${truck.rating}.`);
+});
