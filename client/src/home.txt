@@ -1,0 +1,97 @@
+ALTERNATIVE CODE FOR ERROR HANDLING with multiple workmates entering different styles of code (camelCase VS snake_case VS PascalCase VS kebab-case VS SCREAMING_SNAKE_CASE VS etc):
+
+
+
+
+
+import { useState, useEffect } from "react";
+import "../App.css";
+
+function Home() {
+  const [foodTrucks, setFoodTrucks] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    // 1. Declare the async operation inside the hook
+    async function fetchFoodTrucks() {
+      try {
+        const response = await fetch("/api/get-all-food-trucks");
+
+        // Check for HTTP errors (like 404 or 500)
+        if (!response.ok) {
+          // throw new Error("Failed to load food truck records.");
+          // 🔍 This will print the exact error code (like 404 or 500) to your browser console
+          console.error(
+            `Backend returned status: ${response.status} (${response.statusText})`,
+          );
+          throw new Error(`Server responded with status ${response.status}`);
+        }
+
+        const data = await response.json();
+        setFoodTrucks(data);
+      } catch (err) {
+        // Automatically catches network issues, 404 throws, and JSON parsing failures
+        console.error("Error fetching data:", err);
+        setError(err.message);
+      }
+    }
+
+    // 2. Fire the function immediately
+    fetchFoodTrucks();
+  }, []);
+
+  return (
+    <div className="home-container">
+      <h1 className="page-title">All Food Trucks</h1>
+      <h3 className="truck-counter">
+        Total number of food trucks: {foodTrucks.length}
+      </h3>
+
+      {error && (
+        <p className="error-message">Error connection issue: {error}</p>
+      )}
+
+      <div className="truck-grid">
+        {foodTrucks.map((truck) => (
+          <div key={truck.id || truck.Id} className="truck-card">
+            <h2 className="truck-name">{truck.name || truck.Name}</h2>
+
+            <div className="card-details">
+              <p>
+                <strong>Id:</strong> {truck.id || truck.Id}
+              </p>
+              <p>
+                <strong>Location:</strong>{" "}
+                {truck.location || truck.current_location || truck.Location}
+              </p>
+              <p>
+                <strong>
+                  <mark>Daily Special:</mark>
+                </strong>{" "}
+                {truck.daily_special || truck.Daily_Special}
+              </p>
+              <p>
+                <strong>Slogan:</strong> "{truck.slogan || truck.Slogan}"
+              </p>
+              <p>
+                <strong>Has Vegan Options:</strong>{" "}
+                {truck.has_vegan_options || truck.Has_Vegan_Options
+                  ? "Yes ✅"
+                  : "No ❌"}
+              </p>
+              <p>
+                <strong>Price Level:</strong>{" "}
+                {truck.price_level || truck.Price_Level}
+              </p>
+              <p>
+                <strong>Rating:</strong> {truck.rating || truck.Rating}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default Home;

@@ -76,3 +76,62 @@ form button {
   font-size: 1rem;
   cursor: pointer;
 }
+
+/* ------------------------------------------------ */
+/*         CARD Layout Structure Additions          */
+
+/* truck COUNTER header/banner */
+.truck-counter {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 3rem;
+}
+
+/* GRID layout matching screenshot display */
+.truck-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding-bottom: 4rem;
+}
+
+/* Individual white cards styling structure */
+.truck-card {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  border: 1px solid #eaeaea;
+}
+
+.truck-card:hover {
+  background: salmon;
+  color: gold;
+}
+
+.truck-name {
+  text-align: center;
+  font-size: 1.5rem;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+}
+.card-details p {
+  margin: 0.8rem 0;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+/* --------- TIME TO START STYLING ERROR MSGS with so many -------- */
+/* API ERROR ALERT feedback alert styling */
+/* (Mismatched API) */
+.error-message {
+  color: #721c24;
+  background-color: #f8d7da;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+  display: inline-block;
+  margin-bottom: 2rem;
+}
