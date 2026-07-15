@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "../App.css";
+// import fire from "./assets/fire.png";
 
 function Home() {
   const [foodTrucks, setFoodTrucks] = useState([]);
@@ -11,7 +12,9 @@ function Home() {
         const response = await fetch("/api/get-all-food-trucks");
 
         if (!response.ok) {
-          throw new Error("Failed to load food truck records.");
+          throw new Error(
+            `Failed to load food truck records. ${response.status}`,
+          );
         }
 
         const data = await response.json();
@@ -49,7 +52,12 @@ function Home() {
               <p>
                 <strong>Location:</strong> {truck.current_location}
               </p>
-              <p>
+              <p
+                className="fire-title"
+                // style={{
+                //   backgroundImage: `url(${fire})`,
+                // }}
+              >
                 <strong>
                   <mark>Daily Special:</mark>
                 </strong>{" "}
