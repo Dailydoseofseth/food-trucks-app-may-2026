@@ -130,15 +130,26 @@ async function addOneFoodTruck(
 
   return result.rows[0];
 }
-
+// -------------------------------------------------
+// -------------------------------------------------
 // 10. deleteOneFoodTruck(id)
+// ASYNC HELPER FUNC to DELETE 1 truck from DB
+// id = PRIMARY KEY parameter
 async function deleteOneFoodTruck(id) {
+  // execute PARAMETERIZED($1) SQL DELETE query
   const result = await db.query(
+    // DELETE row & RETURN deleted record
     "DELETE FROM food_trucks WHERE id = $1 RETURNING *",
+    // value for SQL placeholder ($1)
     [id],
   );
+  // return deleted ROW object
+  // 1st ARRAY ELEM
+  // result.rows IS the ARRAY
   return result.rows[0];
 }
+// -------------------------------------------------
+// -------------------------------------------------
 
 // 11. updateFoodTruckLocation(id, newLocation)
 async function updateFoodTruckLocation(id, newLocation) {
@@ -246,14 +257,20 @@ app.post("/add-one-food-truck", async (req, res) => {
   res.send(`Success! ${truck.name} was added!`);
 });
 
+// -------------------------------------------------
+// -------------------------------------------------
 // 10. POST /delete-one-food-truck/:id - Seth
+// DYNAMIC POST endpoint to DELETE 1 food truck
 app.post("/delete-one-food-truck/:id", async (req, res) => {
+  // get ID from ROUTE PARAMETER
   const id = req.params.id;
-
+  // call HELPER FUNC & WAIT for DB DELETE (id=ARG)
   await deleteOneFoodTruck(id);
-
+  // send SUCCESS RESPONSE ($dynam temp lit)
   res.send(`Success! ${id} was deleted.`);
 });
+// -------------------------------------------------
+// -------------------------------------------------
 
 // 11. ???????
 
