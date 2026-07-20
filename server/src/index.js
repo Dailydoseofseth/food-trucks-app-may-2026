@@ -136,9 +136,10 @@ async function addOneFoodTruck(
 // ASYNC HELPER FUNC to DELETE 1 truck from DB
 // id = PRIMARY KEY parameter
 async function deleteOneFoodTruck(id) {
+  // AWAITing for...
   // execute PARAMETERIZED($1) SQL DELETE query
   const result = await db.query(
-    // DELETE row & RETURN deleted record
+    // DELETE row & RETURN deleted record (or NEW ARRay-OBJs without deleted truck OBJ)
     "DELETE FROM food_trucks WHERE id = $1 RETURNING *",
     // value for SQL placeholder ($1)
     [id],
